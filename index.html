@@ -1,39 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Student AI Tools · Colour Your Focus</title>
+  <title>claro · Syllabus Compiler</title>
   <style>
-    /* ----- GLOBAL RESET & BASE ----- */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      transition: background-colour 0.2s ease, border-colour 0.2s, colour 0.2s;
     }
 
-    body {
-      font-family: system-ui, 'Segoe UI', 'Inter', 'Helvetica Neue', sans-serif;
-      line-height: 1.5;
-      padding: 2rem 1.5rem;
-      min-height: 100vh;
-    }
-
-    /* Theme variables (will be overridden by JS) */
+    /* ----- THEME VARIABLES (default: neutral) ----- */
     :root {
-      --bg: #ffffff;
-      --surface: #f9f9f9;
-      --text: #1e1e2f;
-      --text-light: #4a4a5a;
-      --border: #e2e2e8;
-      --primary: #3b82f6;
-      --primary-hover: #2563eb;
-      --card-shadow: 0 8px 20px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.05);
+      --bg: #fef9f0;
+      --surface: #fffaf2;
+      --text: #2c2b28;
+      --text-light: #5e5b56;
+      --border: #f0e4d0;
+      --primary: #d98c2b;
+      --primary-hover: #c07a22;
+      --card-shadow: 0 8px 20px rgba(0,0,0,0.03);
+      --font-main: system-ui, 'Segoe UI', 'Helvetica Neue', sans-serif;
     }
 
-    /* Baby pink theme */
-    body[data-theme="pink"] {
+    /* baby pink */
+    body[data-theme="baby pink"] {
       --bg: #fff5f7;
       --surface: #ffeef2;
       --text: #3f2e35;
@@ -41,11 +34,10 @@
       --border: #fbc4d1;
       --primary: #e8798a;
       --primary-hover: #db6a7c;
-      --card-shadow: 0 8px 20px rgba(232, 121, 138, 0.08);
     }
 
-    /* Mint green theme */
-    body[data-theme="mint"] {
+    /* mint green */
+    body[data-theme="mint green"] {
       --bg: #f0faf5;
       --surface: #e4f5ec;
       --text: #1e3a2f;
@@ -53,28 +45,86 @@
       --border: #b8e0cc;
       --primary: #2c9c6e;
       --primary-hover: #23855d;
-      --card-shadow: 0 8px 20px rgba(44, 156, 110, 0.08);
+    }
+
+    /* light orange */
+    body[data-theme="light orange"] {
+      --bg: #fff5e6;
+      --surface: #ffefdb;
+      --text: #4a341a;
+      --text-light: #8b6b42;
+      --border: #ffd9a5;
+      --primary: #e67e22;
+      --primary-hover: #d35400;
+    }
+
+    /* paper yellow */
+    body[data-theme="paper yellow"] {
+      --bg: #fef9e0;
+      --surface: #fffdf0;
+      --text: #3d3a2b;
+      --text-light: #6b6548;
+      --border: #f7e9b0;
+      --primary: #c9a03d;
+      --primary-hover: #b0882c;
+    }
+
+    /* lilac */
+    body[data-theme="lilac"] {
+      --bg: #f7f0ff;
+      --surface: #fbf8ff;
+      --text: #3a2e4a;
+      --text-light: #7b6b96;
+      --border: #e3d6f5;
+      --primary: #9b6db7;
+      --primary-hover: #855aa0;
+    }
+
+    /* dyslexic font */
+    body[data-theme="dyslexic font"] {
+      --bg: #fdf8e7;
+      --surface: #fffff0;
+      --text: #1a1a1a;
+      --text-light: #4a4a4a;
+      --border: #e0e0b0;
+      --primary: #2c5f8a;
+      --primary-hover: #1e4665;
+      --font-main: 'OpenDyslexic', 'Comic Neue', 'Comic Sans MS', sans-serif;
+    }
+
+    /* autism friendly */
+    body[data-theme="autism friendly"] {
+      --bg: #eef4fc;
+      --surface: #fafcff;
+      --text: #2c3e50;
+      --text-light: #5d7a9a;
+      --border: #cbdbe6;
+      --primary: #6c8db0;
+      --primary-hover: #5a7799;
     }
 
     body {
       background-color: var(--bg);
       color: var(--text);
+      font-family: var(--font-main);
+      line-height: 1.5;
+      padding: 1.5rem;
+      min-height: 100vh;
     }
 
-    /* Layout components */
     .container {
-      max-width: 1280px;
+      max-width: 1100px;
       margin: 0 auto;
     }
 
-    /* header + theme picker */
+    /* header */
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       padding-bottom: 1rem;
       border-bottom: 2px solid var(--border);
     }
@@ -82,306 +132,260 @@
     .logo h1 {
       font-size: 1.8rem;
       font-weight: 600;
-      letter-spacing: -0.02em;
     }
-
     .logo p {
       color: var(--text-light);
       font-size: 0.9rem;
     }
 
-    .theme-picker {
-      display: flex;
-      gap: 1rem;
+    .back-link {
       background: var(--surface);
       padding: 0.5rem 1rem;
-      border-radius: 60px;
+      border-radius: 2rem;
+      text-decoration: none;
+      color: var(--text);
       border: 1px solid var(--border);
+      font-weight: 500;
+    }
+    .back-link:hover {
+      background: var(--border);
     }
 
+    /* theme picker */
+    .theme-picker {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      background: var(--surface);
+      padding: 0.6rem 1rem;
+      border-radius: 60px;
+      border: 1px solid var(--border);
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
     .theme-btn {
       border: none;
       background: none;
-      font-size: 1rem;
+      font-size: 0.85rem;
       font-weight: 500;
-      padding: 0.4rem 1rem;
+      padding: 0.3rem 0.8rem;
       border-radius: 40px;
       cursor: pointer;
-      transition: all 0.2s;
       color: var(--text);
+      transition: all 0.1s;
     }
-
     .theme-btn.active {
       background: var(--primary);
       color: white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
 
-    .theme-btn:first-of-type.active {
-      background: #e8798a;
-      color: white;
-    }
-    .theme-btn:last-of-type.active {
-      background: #2c9c6e;
-      color: white;
-    }
-
-    /* tools grid */
-    .tools-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.8rem;
-      margin: 2rem 0 3rem;
-    }
-
-    .tool-card {
+    /* main card */
+    .card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 2rem;
-      padding: 1.5rem;
+      padding: 2rem;
       box-shadow: var(--card-shadow);
-      transition: transform 0.1s ease, box-shadow 0.2s;
+      margin: 1.5rem 0;
     }
 
-    .tool-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 30px -12px rgba(0,0,0,0.1);
+    .upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 1.5rem;
+      padding: 2rem;
+      text-align: center;
+      cursor: pointer;
+      background: var(--bg);
+      margin-bottom: 1.5rem;
+    }
+    .upload-area:hover {
+      border-color: var(--primary);
     }
 
-    .tool-card h3 {
-      font-size: 1.6rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .tool-card p {
-      color: var(--text-light);
-      margin-bottom: 1.2rem;
-      font-size: 0.95rem;
+    input[type="file"] {
+      display: none;
     }
 
     .btn {
-      display: inline-block;
       background: var(--primary);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
+      padding: 0.7rem 1.4rem;
       border-radius: 2rem;
       font-weight: 500;
-      text-decoration: none;
       cursor: pointer;
-      transition: background 0.2s, transform 0.05s;
+      font-family: inherit;
+      margin-top: 1rem;
     }
-
     .btn:hover {
       background: var(--primary-hover);
     }
 
-    /* active tool demo (Magic ToDo page style) */
-    .tool-page {
-      background: var(--surface);
-      border-radius: 2rem;
-      padding: 2rem;
-      border: 1px solid var(--border);
-      margin-top: 1.5rem;
-    }
-
-    textarea, input, select {
-      width: 100%;
-      padding: 0.9rem 1rem;
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 1.5rem;
-      font-family: inherit;
-      font-size: 1rem;
-      color: var(--text);
-      margin-bottom: 1rem;
-      resize: vertical;
-    }
-
-    .mock-result {
+    .mock-preview {
       background: var(--bg);
       border-radius: 1.5rem;
-      padding: 1.2rem;
+      padding: 1rem;
       margin-top: 1rem;
+      font-size: 0.9rem;
       border-left: 4px solid var(--primary);
+    }
+
+    .event-list {
+      margin: 1rem 0;
+      list-style: none;
+    }
+    .event-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
 
     footer {
       text-align: center;
-      margin-top: 4rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+      font-size: 0.8rem;
       color: var(--text-light);
-      font-size: 0.85rem;
     }
-
-    .back-home {
-      margin-bottom: 1rem;
-      display: inline-block;
-    }
-
-    /* responsive */
     @media (max-width: 700px) {
-      body { padding: 1.2rem; }
-      .top-bar { flex-direction: column; align-items: stretch; text-align: center; }
-      .theme-picker { justify-content: center; }
-      .tool-card h3 { font-size: 1.4rem; }
+      body { padding: 1rem; }
+      .top-bar { flex-direction: column; align-items: stretch; }
+      .theme-picker { justify-content: center; width: auto; }
     }
   </style>
+  <!-- OpenDyslexic font -->
+  <link href="https://fonts.cdnfonts.com/css/opendyslexic" rel="stylesheet">
 </head>
-<body data-theme="pink">
-  <div class="container">
-    <!-- dynamic content will be injected here by JS SPA style, but we'll use simple page sections -->
-    <div id="app"></div>
+<body data-theme="paper yellow">
+<div class="container">
+  <div class="top-bar">
+    <div class="logo">
+      <h1>📚 claro · Syllabus Compiler</h1>
+      <p>upload your syllabus → auto calendar & smart study plan</p>
+    </div>
+    <div>
+      <a href="index.html" class="back-link">← back to tools</a>
+    </div>
   </div>
 
-  <script>
-    // Simple client-side routing: show home or tool page
-    // We keep two views: 'home' and 'tool-magic-todo'
-    let currentView = 'home';   // 'home' or 'magicTodo'
-    
-    // Predefined tasks for mock / placeholder (no API yet)
-    const mockBreakdown = {
-      default: "1. Gather all materials\n2. Break the task into smaller chunks\n3. Set a timer for 15 minutes\n4. Start with the easiest part\n5. Take a 5-min break\n6. Review what you've done",
-      essay: "1. Understand the essay prompt\n2. Research and gather sources\n3. Create a thesis statement\n4. Outline main arguments\n5. Write a rough draft\n6. Revise and proofread",
-      study: "1. Review your notes\n2. Create flashcards for key terms\n3. Take a practice quiz\n4. Identify weak topics\n5. Re-study those topics\n6. Teach someone else"
-    };
+  <div class="theme-picker">
+    <button class="theme-btn" data-theme="baby pink">🎀 baby pink</button>
+    <button class="theme-btn" data-theme="mint green">🌿 mint green</button>
+    <button class="theme-btn" data-theme="light orange">🍊 light orange</button>
+    <button class="theme-btn" data-theme="paper yellow">📄 paper yellow</button>
+    <button class="theme-btn" data-theme="lilac">🌸 lilac</button>
+    <button class="theme-btn" data-theme="dyslexic font">📖 dyslexic font</button>
+    <button class="theme-btn" data-theme="autism friendly">🧩 autism friendly</button>
+  </div>
 
-    function getMockSteps(taskText) {
-      const lower = taskText.toLowerCase();
-      if (lower.includes('essay') || lower.includes('paper')) return mockBreakdown.essay;
-      if (lower.includes('study') || lower.includes('exam') || lower.includes('test')) return mockBreakdown.study;
-      return mockBreakdown.default;
+  <div class="card">
+    <h2>📎 Step 1 – Upload your syllabus (PDF or image)</h2>
+    <p style="margin: 0.5rem 0 1rem; color: var(--text-light);">We’ll extract due dates, exams, assignments.</p>
+    <div class="upload-area" id="uploadArea">
+      <p>📂 Click or drag file here</p>
+      <input type="file" id="syllabusFile" accept=".pdf,.jpg,.png,.jpeg">
+      <button class="btn" id="mockExtractBtn" style="margin-top: 1rem;">✨ extract events (mock demo)</button>
+    </div>
+
+    <div id="resultArea" style="display: none;">
+      <h3>📅 Extracted events</h3>
+      <ul class="event-list" id="eventList"></ul>
+      <button class="btn" id="exportCalendarBtn">📤 export to Google Calendar (simulated)</button>
+      <div class="mock-preview" id="smartPlan">
+        <strong>🧠 smart study plan (coming soon)</strong><br>
+        Loading...
+      </div>
+    </div>
+  </div>
+  <footer>
+    ⚡ This is a UI prototype – real AI extraction and calendar sync will be added later.<br>
+    🧡 Colour themes and dyslexia/autism modes are fully functional. British English spelling.
+  </footer>
+</div>
+
+<script>
+  // Theme handling
+  function setTheme(themeName) {
+    document.body.setAttribute('data-theme', themeName);
+    localStorage.setItem('claro_syllabus_theme', themeName);
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+      if (btn.dataset.theme === themeName) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+  }
+  const savedTheme = localStorage.getItem('claro_syllabus_theme');
+  const validThemes = ['baby pink', 'mint green', 'light orange', 'paper yellow', 'lilac', 'dyslexic font', 'autism friendly'];
+  if (savedTheme && validThemes.includes(savedTheme)) {
+    setTheme(savedTheme);
+  } else {
+    setTheme('paper yellow');
+  }
+
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      setTheme(btn.dataset.theme);
+    });
+  });
+
+  // Mock data for syllabus extraction (simulates AI result)
+  const mockEvents = [
+    { name: "📖 Reading response 1", date: "2025-04-30", type: "assignment", points: 10 },
+    { name: "📝 Midterm exam", date: "2025-05-15", type: "exam", points: 30 },
+    { name: "✍️ Research proposal", date: "2025-05-25", type: "assignment", points: 15 },
+    { name: "🎓 Final project draft", date: "2025-06-07", type: "project", points: 20 },
+    { name: "📚 Final exam", date: "2025-06-20", type: "exam", points: 25 }
+  ];
+
+  const uploadArea = document.getElementById('uploadArea');
+  const fileInput = document.getElementById('syllabusFile');
+  const mockBtn = document.getElementById('mockExtractBtn');
+  const resultDiv = document.getElementById('resultArea');
+  const eventListUl = document.getElementById('eventList');
+  const exportBtn = document.getElementById('exportCalendarBtn');
+  const smartPlanDiv = document.getElementById('smartPlan');
+
+  function renderEvents(events) {
+    if (!eventListUl) return;
+    eventListUl.innerHTML = '';
+    events.forEach(ev => {
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${ev.name}</span><span><strong>${ev.date}</strong> · ${ev.points} pts</span>`;
+      eventListUl.appendChild(li);
+    });
+    smartPlanDiv.innerHTML = `🧠 <strong>smart plan (beta)</strong><br>
+      Based on due dates and point weight, we recommend:<br>
+      • Start <strong>${events[0]?.name}</strong> by ${events[0]?.date}<br>
+      • For the midterm (${events[1]?.points} pts), begin review 2 weeks before.<br>
+      ✨ Real AI scheduling will appear after API integration.`;
+  }
+
+  mockBtn.addEventListener('click', () => {
+    resultDiv.style.display = 'block';
+    renderEvents(mockEvents);
+  });
+
+  exportBtn.addEventListener('click', () => {
+    alert("📅 Calendar export simulation: In the real version, this would add events to your Google Calendar. For now, enjoy the mock preview!");
+  });
+
+  uploadArea.addEventListener('click', () => fileInput.click());
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = 'var(--primary)';
+  });
+  uploadArea.addEventListener('dragleave', () => {
+    uploadArea.style.borderColor = 'var(--border)';
+  });
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.style.borderColor = 'var(--border)';
+    const files = e.dataTransfer.files;
+    if (files.length) {
+      fileInput.files = files;
     }
-
-    // Theme handling
-    function setTheme(themeName) {
-      document.body.setAttribute('data-theme', themeName);
-      localStorage.setItem('studentToolTheme', themeName);
-      // update active state on buttons
-      document.querySelectorAll('.theme-btn').forEach(btn => {
-        if (btn.dataset.theme === themeName) btn.classList.add('active');
-        else btn.classList.remove('active');
-      });
-    }
-
-    // Render the current view
-    function render() {
-      const app = document.getElementById('app');
-      if (!app) return;
-
-      if (currentView === 'home') {
-        app.innerHTML = `
-          <div class="top-bar">
-            <div class="logo">
-              <h1>✧ focusFlow ✧</h1>
-              <p>student-friendly AI tools · your colour, your flow</p>
-            </div>
-            <div class="theme-picker">
-              <button class="theme-btn" data-theme="pink" style="background: #ffeef2; color:#c97b8a;">🎀 Baby pink</button>
-              <button class="theme-btn" data-theme="mint" style="background: #e4f5ec; color:#2c6e4f;">🌿 Mint green</button>
-            </div>
-          </div>
-
-          <div class="tools-grid">
-            <div class="tool-card">
-              <h3>✨ Magic ToDo</h3>
-              <p>Turn overwhelming tasks into small, actionable steps — made for student brains.</p>
-              <a href="#" class="btn" data-nav="magicTodo">Try now →</a>
-            </div>
-            <div class="tool-card">
-              <h3>📝 Formalizer</h3>
-              <p>Rephrase frantic emails or messages into professor‑ready politeness.</p>
-              <button class="btn" disabled style="opacity:0.6;">coming soon</button>
-            </div>
-            <div class="tool-card">
-              <h3>⏱️ Estimator</h3>
-              <p>How long will that assignment actually take? AI estimates + Pomodoro hints.</p>
-              <button class="btn" disabled style="opacity:0.6;">coming soon</button>
-            </div>
-            <div class="tool-card">
-              <h3>📚 Compiler</h3>
-              <p>Paste messy lecture notes → get clean bullet points + study questions.</p>
-              <button class="btn" disabled style="opacity:0.6;">coming soon</button>
-            </div>
-          </div>
-          <footer>
-            💡 pick a colour palette above — it stays with you. All core tools will be fully AI‑powered soon.<br>
-            🧠 student prototype: Magic ToDo shows a smart example (no API yet, ready for upgrade)
-          </footer>
-        `;
-      } 
-      else if (currentView === 'magicTodo') {
-        app.innerHTML = `
-          <div class="top-bar" style="margin-bottom: 1rem;">
-            <a href="#" class="back-home btn" data-nav="home" style="background: var(--surface); color: var(--primary); border:1px solid var(--border);">← back to all tools</a>
-            <div class="theme-picker">
-              <button class="theme-btn" data-theme="pink" style="background: #ffeef2; color:#c97b8a;">🎀 Baby pink</button>
-              <button class="theme-btn" data-theme="mint" style="background: #e4f5ec; color:#2c6e4f;">🌿 Mint green</button>
-            </div>
-          </div>
-          <div class="tool-page">
-            <h2>✨ Magic ToDo · break it down</h2>
-            <p style="margin-bottom: 1rem; color: var(--text-light);">Describe a task or assignment, and we’ll generate step‑by‑step guide. (Mock demo – real AI coming after layout)</p>
-            <textarea id="taskInput" rows="3" placeholder="e.g., Write a 5-page research essay on climate change policy due next week OR study for organic chemistry final">Write a history essay about the French Revolution</textarea>
-            <button id="breakdownBtn" class="btn">✨ Break it down</button>
-            <div id="resultArea" class="mock-result">
-              <strong>✨ suggested steps:</strong><br>
-              <div id="stepList">1. Understand the essay prompt<br>2. Research and gather sources<br>3. Create a thesis statement<br>4. Outline main arguments<br>5. Write a rough draft<br>6. Revise and proofread</div>
-            </div>
-            <p style="font-size:0.8rem; margin-top:1.5rem; color: var(--text-light);">💡 Later this will call OpenAI to give you personalized steps + spiciness levels. Colour preference saved.</p>
-          </div>
-          <footer>🎓 built for students — more tools, real AI soon</footer>
-        `;
-        // attach magic todo mock logic
-        const btn = document.getElementById('breakdownBtn');
-        const textarea = document.getElementById('taskInput');
-        const stepDiv = document.getElementById('stepList');
-        if (btn && textarea && stepDiv) {
-          const updateSteps = () => {
-            const userTask = textarea.value.trim();
-            if (!userTask) {
-              stepDiv.innerHTML = "✨ Type a task to get started!";
-              return;
-            }
-            const steps = getMockSteps(userTask);
-            stepDiv.innerHTML = steps.split('\n').map(step => `✓ ${step}`).join('<br>');
-          };
-          btn.addEventListener('click', updateSteps);
-          // initial mock
-          updateSteps();
-        }
-      }
-
-      // re-attach theme buttons & navigation after each render
-      document.querySelectorAll('.theme-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const theme = btn.dataset.theme;
-          if (theme) setTheme(theme);
-        });
-      });
-      document.querySelectorAll('[data-nav]').forEach(link => {
-        link.addEventListener('click', (e) => {
-          e.preventDefault();
-          const target = link.dataset.nav;
-          if (target === 'home') currentView = 'home';
-          else if (target === 'magicTodo') currentView = 'magicTodo';
-          render();
-        });
-      });
-    }
-
-    // initial load: get stored theme, set view from hash maybe (optional)
-    const savedTheme = localStorage.getItem('studentToolTheme');
-    if (savedTheme === 'mint' || savedTheme === 'pink') {
-      document.body.setAttribute('data-theme', savedTheme);
-    } else {
-      document.body.setAttribute('data-theme', 'pink'); // default pink
-    }
-    // simple routing: hash? but start with home
-    currentView = 'home';
-    render();
-  </script>
+  });
+</script>
 </body>
 </html>
