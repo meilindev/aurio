@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>claro · Syllabus Compiler</title>
+  <title>aurio · friendly study tools</title>
   <style>
     * {
       margin: 0;
@@ -12,7 +12,7 @@
       transition: background-colour 0.2s ease, border-colour 0.2s, colour 0.2s;
     }
 
-    /* ----- THEME VARIABLES (default: neutral) ----- */
+    /* Default theme (will be overridden) */
     :root {
       --bg: #fef9f0;
       --surface: #fffaf2;
@@ -113,7 +113,7 @@
     }
 
     .container {
-      max-width: 1100px;
+      max-width: 1280px;
       margin: 0 auto;
     }
 
@@ -124,34 +124,23 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       padding-bottom: 1rem;
       border-bottom: 2px solid var(--border);
     }
 
     .logo h1 {
-      font-size: 1.8rem;
+      font-size: 2rem;
       font-weight: 600;
+      letter-spacing: -0.01em;
+      text-transform: lowercase;
     }
-    .logo p {
+    .tagline {
       color: var(--text-light);
       font-size: 0.9rem;
+      margin-top: 0.25rem;
     }
 
-    .back-link {
-      background: var(--surface);
-      padding: 0.5rem 1rem;
-      border-radius: 2rem;
-      text-decoration: none;
-      color: var(--text);
-      border: 1px solid var(--border);
-      font-weight: 500;
-    }
-    .back-link:hover {
-      background: var(--border);
-    }
-
-    /* theme picker */
     .theme-picker {
       display: flex;
       flex-wrap: wrap;
@@ -160,148 +149,188 @@
       padding: 0.6rem 1rem;
       border-radius: 60px;
       border: 1px solid var(--border);
-      margin-bottom: 1rem;
-      width: fit-content;
     }
     .theme-btn {
       border: none;
       background: none;
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 500;
       padding: 0.3rem 0.8rem;
       border-radius: 40px;
       cursor: pointer;
       color: var(--text);
-      transition: all 0.1s;
+      text-transform: lowercase;
     }
     .theme-btn.active {
       background: var(--primary);
       color: white;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
     }
 
-    /* main card */
-    .card {
+    /* tools grid */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0 2rem;
+    }
+
+    .tool-card {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 2rem;
-      padding: 2rem;
+      border-radius: 1.8rem;
+      padding: 1.5rem;
       box-shadow: var(--card-shadow);
-      margin: 1.5rem 0;
+      transition: transform 0.1s ease;
     }
-
-    .upload-area {
-      border: 2px dashed var(--border);
-      border-radius: 1.5rem;
-      padding: 2rem;
-      text-align: center;
-      cursor: pointer;
-      background: var(--bg);
-      margin-bottom: 1.5rem;
+    .tool-card:hover {
+      transform: translateY(-4px);
     }
-    .upload-area:hover {
-      border-color: var(--primary);
+    .tool-card h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      text-transform: lowercase;
     }
-
-    input[type="file"] {
-      display: none;
+    .tool-card p {
+      color: var(--text-light);
+      margin-bottom: 1.2rem;
+      font-size: 0.9rem;
     }
-
     .btn {
+      display: inline-block;
       background: var(--primary);
       color: white;
       border: none;
-      padding: 0.7rem 1.4rem;
+      padding: 0.6rem 1.2rem;
       border-radius: 2rem;
       font-weight: 500;
+      text-decoration: none;
       cursor: pointer;
       font-family: inherit;
-      margin-top: 1rem;
+      text-transform: lowercase;
     }
     .btn:hover {
       background: var(--primary-hover);
     }
+    .btn:disabled, .btn.disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
 
-    .mock-preview {
+    /* task breaker demo panel */
+    .magic-demo {
+      margin-top: 2rem;
+      background: var(--surface);
+      border-radius: 1.8rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    textarea {
+      width: 100%;
+      padding: 0.8rem;
       background: var(--bg);
-      border-radius: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: 1.2rem;
+      font-family: inherit;
+      font-size: 1rem;
+      color: var(--text);
+      margin: 0.5rem 0 1rem;
+    }
+    .mock-result {
+      background: var(--bg);
+      border-radius: 1.2rem;
       padding: 1rem;
       margin-top: 1rem;
-      font-size: 0.9rem;
       border-left: 4px solid var(--primary);
     }
-
-    .event-list {
-      margin: 1rem 0;
-      list-style: none;
-    }
-    .event-list li {
-      padding: 0.5rem 0;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
     footer {
       text-align: center;
-      margin-top: 2rem;
-      font-size: 0.8rem;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
       color: var(--text-light);
+      font-size: 0.8rem;
+    }
+    .syllabus-link {
+      display: inline-block;
+      margin-top: 1rem;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
     }
     @media (max-width: 700px) {
       body { padding: 1rem; }
       .top-bar { flex-direction: column; align-items: stretch; }
-      .theme-picker { justify-content: center; width: auto; }
+      .theme-picker { justify-content: center; }
     }
   </style>
-  <!-- OpenDyslexic font -->
   <link href="https://fonts.cdnfonts.com/css/opendyslexic" rel="stylesheet">
 </head>
 <body data-theme="paper yellow">
 <div class="container">
   <div class="top-bar">
     <div class="logo">
-      <h1>📚 claro · Syllabus Compiler</h1>
-      <p>upload your syllabus → auto calendar & smart study plan</p>
+      <h1>✧ aurio</h1>
+      <div class="tagline">your friendly, colourful study toolkit — clear mind, bright aura</div>
     </div>
-    <div>
-      <a href="index.html" class="back-link">← back to tools</a>
+    <div class="theme-picker">
+      <button class="theme-btn" data-theme="baby pink">🎀 baby pink</button>
+      <button class="theme-btn" data-theme="mint green">🌿 mint green</button>
+      <button class="theme-btn" data-theme="light orange">🍊 light orange</button>
+      <button class="theme-btn" data-theme="paper yellow">📄 paper yellow</button>
+      <button class="theme-btn" data-theme="lilac">🌸 lilac</button>
+      <button class="theme-btn" data-theme="dyslexic font">📖 dyslexic font</button>
+      <button class="theme-btn" data-theme="autism friendly">🧩 autism friendly</button>
     </div>
   </div>
 
-  <div class="theme-picker">
-    <button class="theme-btn" data-theme="baby pink">🎀 baby pink</button>
-    <button class="theme-btn" data-theme="mint green">🌿 mint green</button>
-    <button class="theme-btn" data-theme="light orange">🍊 light orange</button>
-    <button class="theme-btn" data-theme="paper yellow">📄 paper yellow</button>
-    <button class="theme-btn" data-theme="lilac">🌸 lilac</button>
-    <button class="theme-btn" data-theme="dyslexic font">📖 dyslexic font</button>
-    <button class="theme-btn" data-theme="autism friendly">🧩 autism friendly</button>
-  </div>
-
-  <div class="card">
-    <h2>📎 Step 1 – Upload your syllabus (PDF or image)</h2>
-    <p style="margin: 0.5rem 0 1rem; color: var(--text-light);">We’ll extract due dates, exams, assignments.</p>
-    <div class="upload-area" id="uploadArea">
-      <p>📂 Click or drag file here</p>
-      <input type="file" id="syllabusFile" accept=".pdf,.jpg,.png,.jpeg">
-      <button class="btn" id="mockExtractBtn" style="margin-top: 1rem;">✨ extract events (mock demo)</button>
+  <div class="tools-grid">
+    <!-- task breaker (active) -->
+    <div class="tool-card">
+      <h3>task breaker</h3>
+      <p>turn a big task into small, clear steps — designed for student brains.</p>
+      <button class="btn" id="magicTodoBtn">try now →</button>
     </div>
-
-    <div id="resultArea" style="display: none;">
-      <h3>📅 Extracted events</h3>
-      <ul class="event-list" id="eventList"></ul>
-      <button class="btn" id="exportCalendarBtn">📤 export to Google Calendar (simulated)</button>
-      <div class="mock-preview" id="smartPlan">
-        <strong>🧠 smart study plan (coming soon)</strong><br>
-        Loading...
-      </div>
+    <!-- email fixer -->
+    <div class="tool-card">
+      <h3>email fixer</h3>
+      <p>rewrite your message to sound more polite or clear. (coming soon)</p>
+      <button class="btn disabled" disabled>coming soon</button>
+    </div>
+    <!-- time guess -->
+    <div class="tool-card">
+      <h3>time guess</h3>
+      <p>estimate how many hours you'll need for an assignment. (soon)</p>
+      <button class="btn disabled" disabled>coming soon</button>
+    </div>
+    <!-- note cleaner -->
+    <div class="tool-card">
+      <h3>note cleaner</h3>
+      <p>turn messy lecture notes into tidy bullet points. (soon)</p>
+      <button class="btn disabled" disabled>coming soon</button>
     </div>
   </div>
+
+  <!-- task breaker demo panel (mock) -->
+  <div id="magicTodoPanel" class="magic-demo" style="display: none;">
+    <h3>✧ task breaker</h3>
+    <p style="color: var(--text-light);">describe a task or assignment, and we’ll generate step‑by‑step guidance. (mock demo — real ai after backend)</p>
+    <textarea id="taskInput" rows="3" placeholder="e.g., write a 5-page essay on climate change policy due next week or prepare for history final">write a history essay about the french revolution</textarea>
+    <button id="breakdownBtn" class="btn">break it down</button>
+    <div id="resultArea" class="mock-result">
+      <strong>✧ suggested steps:</strong><br>
+      <div id="stepList">1. understand the essay prompt<br>2. research and gather sources<br>3. create a thesis statement<br>4. outline main arguments<br>5. write a rough draft<br>6. revise and proofread</div>
+    </div>
+    <a href="#" id="closeMagicTodo" class="syllabus-link" style="margin-top: 0.8rem;">← close</a>
+  </div>
+
+  <div style="text-align: center; margin: 1rem 0;">
+    <a href="syllabus.html" class="btn" style="background: var(--surface); color: var(--primary); border: 1px solid var(--border);">📚 try syllabus reader →</a>
+  </div>
+
   <footer>
-    ⚡ This is a UI prototype – real AI extraction and calendar sync will be added later.<br>
-    🧡 Colour themes and dyslexia/autism modes are fully functional. British English spelling.
+    🧡 aurio — gently powered by ai (coming soon). colour themes & mock tools work now.<br>
+    british english spelling. your theme is saved locally.
   </footer>
 </div>
 
@@ -309,83 +338,65 @@
   // Theme handling
   function setTheme(themeName) {
     document.body.setAttribute('data-theme', themeName);
-    localStorage.setItem('claro_syllabus_theme', themeName);
+    localStorage.setItem('aurio_theme', themeName);
     document.querySelectorAll('.theme-btn').forEach(btn => {
       if (btn.dataset.theme === themeName) btn.classList.add('active');
       else btn.classList.remove('active');
     });
   }
-  const savedTheme = localStorage.getItem('claro_syllabus_theme');
+  const saved = localStorage.getItem('aurio_theme');
   const validThemes = ['baby pink', 'mint green', 'light orange', 'paper yellow', 'lilac', 'dyslexic font', 'autism friendly'];
-  if (savedTheme && validThemes.includes(savedTheme)) {
-    setTheme(savedTheme);
-  } else {
-    setTheme('paper yellow');
-  }
+  if (saved && validThemes.includes(saved)) setTheme(saved);
+  else setTheme('paper yellow');
 
   document.querySelectorAll('.theme-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      setTheme(btn.dataset.theme);
-    });
+    btn.addEventListener('click', () => setTheme(btn.dataset.theme));
   });
 
-  // Mock data for syllabus extraction (simulates AI result)
-  const mockEvents = [
-    { name: "📖 Reading response 1", date: "2025-04-30", type: "assignment", points: 10 },
-    { name: "📝 Midterm exam", date: "2025-05-15", type: "exam", points: 30 },
-    { name: "✍️ Research proposal", date: "2025-05-25", type: "assignment", points: 15 },
-    { name: "🎓 Final project draft", date: "2025-06-07", type: "project", points: 20 },
-    { name: "📚 Final exam", date: "2025-06-20", type: "exam", points: 25 }
-  ];
-
-  const uploadArea = document.getElementById('uploadArea');
-  const fileInput = document.getElementById('syllabusFile');
-  const mockBtn = document.getElementById('mockExtractBtn');
-  const resultDiv = document.getElementById('resultArea');
-  const eventListUl = document.getElementById('eventList');
-  const exportBtn = document.getElementById('exportCalendarBtn');
-  const smartPlanDiv = document.getElementById('smartPlan');
-
-  function renderEvents(events) {
-    if (!eventListUl) return;
-    eventListUl.innerHTML = '';
-    events.forEach(ev => {
-      const li = document.createElement('li');
-      li.innerHTML = `<span>${ev.name}</span><span><strong>${ev.date}</strong> · ${ev.points} pts</span>`;
-      eventListUl.appendChild(li);
+  // task breaker panel toggle
+  const magicBtn = document.getElementById('magicTodoBtn');
+  const magicPanel = document.getElementById('magicTodoPanel');
+  const closePanel = document.getElementById('closeMagicTodo');
+  magicBtn.addEventListener('click', () => {
+    magicPanel.style.display = 'block';
+    magicPanel.scrollIntoView({ behavior: 'smooth' });
+  });
+  if (closePanel) {
+    closePanel.addEventListener('click', (e) => {
+      e.preventDefault();
+      magicPanel.style.display = 'none';
     });
-    smartPlanDiv.innerHTML = `🧠 <strong>smart plan (beta)</strong><br>
-      Based on due dates and point weight, we recommend:<br>
-      • Start <strong>${events[0]?.name}</strong> by ${events[0]?.date}<br>
-      • For the midterm (${events[1]?.points} pts), begin review 2 weeks before.<br>
-      ✨ Real AI scheduling will appear after API integration.`;
   }
 
-  mockBtn.addEventListener('click', () => {
-    resultDiv.style.display = 'block';
-    renderEvents(mockEvents);
-  });
+  // Mock task breakdown logic (same as before, just lower case output)
+  const mockBreakdown = {
+    default: "1. gather all materials\n2. break the task into smaller chunks\n3. set a timer for 15 minutes\n4. start with the easiest part\n5. take a 5-min break\n6. review what you've done",
+    essay: "1. understand the essay prompt\n2. research and gather sources\n3. create a thesis statement\n4. outline main arguments\n5. write a rough draft\n6. revise and proofread",
+    study: "1. review your notes\n2. create flashcards for key terms\n3. take a practice quiz\n4. identify weak topics\n5. re-study those topics\n6. teach someone else"
+  };
+  function getMockSteps(taskText) {
+    const lower = taskText.toLowerCase();
+    if (lower.includes('essay') || lower.includes('paper')) return mockBreakdown.essay;
+    if (lower.includes('study') || lower.includes('exam') || lower.includes('test')) return mockBreakdown.study;
+    return mockBreakdown.default;
+  }
 
-  exportBtn.addEventListener('click', () => {
-    alert("📅 Calendar export simulation: In the real version, this would add events to your Google Calendar. For now, enjoy the mock preview!");
-  });
-
-  uploadArea.addEventListener('click', () => fileInput.click());
-  uploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadArea.style.borderColor = 'var(--primary)';
-  });
-  uploadArea.addEventListener('dragleave', () => {
-    uploadArea.style.borderColor = 'var(--border)';
-  });
-  uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.style.borderColor = 'var(--border)';
-    const files = e.dataTransfer.files;
-    if (files.length) {
-      fileInput.files = files;
-    }
-  });
+  const textarea = document.getElementById('taskInput');
+  const breakBtn = document.getElementById('breakdownBtn');
+  const stepDiv = document.getElementById('stepList');
+  if (breakBtn && textarea && stepDiv) {
+    const updateSteps = () => {
+      const task = textarea.value.trim();
+      if (!task) {
+        stepDiv.innerHTML = "✧ type a task to get started!";
+        return;
+      }
+      const steps = getMockSteps(task);
+      stepDiv.innerHTML = steps.split('\n').map(s => `✓ ${s}`).join('<br>');
+    };
+    breakBtn.addEventListener('click', updateSteps);
+    updateSteps(); // initial demo
+  }
 </script>
 </body>
 </html>
