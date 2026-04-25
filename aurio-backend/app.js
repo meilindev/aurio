@@ -20,23 +20,31 @@ app.post('/api/tools', async (req, res) => {
   let prompt = '';
   if (tool === 'task-breaker') {
     prompt = `Break down the task "${input}" into clear, numbered steps. Use simple language.`;
+  } else if (tool === 'email-fixer') { // Keep for future expansion
+    prompt = `Rewrite this email to be more polite and professional: ${input}`;
+  } else if (tool === 'time-guess') { // Keep for future expansion
+    prompt = `Estimate how many hours this task will take: ${input}`;
+  } else if (tool === 'note-cleaner') { // Keep for future expansion
+    prompt = `Turn these messy notes into clean, organized bullet points: ${input}`;
   } else {
     return res.status(400).json({ error: 'Unknown tool' });
   }
 
   try {
-    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    // --- DeepSeek specific configuration ---
+    const response = await fetch('https://api.deepseek.com/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`, // Use DEEPSEEK_API_KEY
       },
       body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
+        model: 'deepseek-chat', // Use a valid DeepSeek model, check their docs for the latest
         messages: [{ role: 'user', content: prompt }],
         temperature: 0.5,
       }),
     });
+    // --- End of DeepSeek specific configuration ---
 
     const data = await response.json();
     const result = data.choices[0].message.content;
